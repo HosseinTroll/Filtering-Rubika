@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>Filter Account Rubika</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg-color: #121212;
+      --text-color: #fff;
+      --input-bg: #2c2c2c;
+      --accent: #00e676;
+    }
+
+    body.light {
+      --bg-color: #f5f5f5;
+      --text-color: #222;
+      --input-bg: #fff;
+      --accent: #00796b;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Vazir', Tahoma, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 15px;
+      transition: background 0.5s ease, color 0.5s ease;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: var(--accent);
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    .form-container {
+      background-color: rgba(0,0,0,0.2);
+      padding: 25px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.6);
+      animation: fadeIn 1.2s ease;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      transition: box-shadow 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      box-shadow: 0 0 5px var(--accent);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    label input[type="checkbox"] {
+      margin-left: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00b248;
+    }
+
+    .error {
+      color: #ff5252;
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 13px;
+      color: #888;
+      text-align: center;
+    }
+
+    .guide-button, .theme-toggle {
+      margin-top: 15px;
+      background-color: #3949ab;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .guide-button:hover, .theme-toggle:hover {
+      background-color: #303f9f;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: -300px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--input-bg);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
+      max-width: 320px;
+      text-align: center;
+      z-index: 999;
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    .popup.show {
+      top: 20%;
+      opacity: 1;
+    }
+
+    .popup p {
+      font-size: 14px;
+      color: var(--text-color);
+      margin-bottom: 10px;
+    }
+
+    .popup a {
+      color: #00bcd4;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .popup a:hover {
+      text-decoration: underline;
+    }
+
+    .popup button {
+      margin-top: 10px;
+      background-color: #e53935;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .popup button:hover {
+      background-color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <h1>🛡️ فیلتر اکانت روبیکا</h1>
+  <div class="form-container">
+    <input type="text" id="targetId" placeholder="ایدی هدف">
+    <input type="text" id="subscriptionCode" placeholder="کد اشتراک شما">
+    <select id="filterType">
+      <option value="">نوع فیلتر را انتخاب کنید</option>
+      <option>اسپم</option>
+      <option>بلاک</option>
+      <option>ریپورت</option>
+    </select>
+    <label>
+      <input type="checkbox" id="agreeRules"> قوانین را می‌پذیرم
+    </label>
+    <button onclick="validateForm()">تایید</button>
+    <button class="guide-button" onclick="showGuide()">📘 دفترچه راهنما</button>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓 تغییر تم</button>
+    <div class="error" id="errorMsg"></div>
+  </div>
+
+  <div class="popup" id="guidePopup">
+    <p>📌 برای خرید کد اشتراک به آیدی تلگرامی زیر مراجعه کنید:</p>
+    <a href="https://t.me/Boy_Fucking" target="_blank">@Boy_Fucking</a><br>
+    <a href="https://t.me/Im_efi_teroll" target="_blank">@Im_efi_teroll</a><br>
+    <a href="https://t.me/Promethazineh" target="_blank">@Promethazineh</a>
+    <br>
+    <button onclick="closeGuide()">بستن</button>
+  </div>
+
+  <div class="footer">
+    Made in Troll
+  </div>
+
+  <script>
+    function validateForm() {
+      const targetId = document.getElementById("targetId").value.trim();
+      const code = document.getElementById("subscriptionCode").value.trim();
+      const filterType = document.getElementById("filterType").value;
+      const agree = document.getElementById("agreeRules").checked;
+      const errorMsg = document.getElementById("errorMsg");
+
+      errorMsg.textContent = "";
+
+      if (!targetId || !code || !filterType || !agree) {
+        errorMsg.textContent = "⚠️ لطفاً همه فیلدها را کامل کنید و قوانین را بپذیرید.";
+        return;
+      }
+
+      if (code === "Solimani") {
+        window.location.href = "success.html";
+      } else {
+        errorMsg.textContent = "❌ کد اشتراک اشتباه است.";
+      }
+    }
+
+    function showGuide() {
+      document.getElementById("guidePopup").classList.add("show");
+    }
+
+    function closeGuide() {
+      document.getElementById("guidePopup").classList.remove("show");
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("light");
+    }
+  </script>
+</body>
+</html>
